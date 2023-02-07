@@ -1,10 +1,10 @@
 # Wrap the Gift
-Игра в жанре hyper casual.
-В ней игроку предстоит заниматься увлекательной упаковкой подарков.
-Были реализованы:
-1. Основная механика упаковки подарков;
-2. Главное меню, меню паузы и настроек;
-3. Магазин с дополнительными видами упаковки.
-4. Автоматическое сохранение.
+A game in the hyper casual genre.
+In it, the player will have to engage in an exciting gift packaging.
+Game have: 
+1. The basic mechanics of gift packaging;
+2. Main menu, pause menu and settings;
+3. A store with additional types of packaging.
+4. Automatic saving.
 
-Версия Unity - 2021.3.11f1
+Version Unity - 2021.3.11f1
