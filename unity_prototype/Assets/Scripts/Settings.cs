@@ -9,16 +9,7 @@ public class Settings : MonoBehaviour
     public Slider Slider_sound;
     public List<AudioSource> sound_background;
     public AudioSource sound_clickbutton;
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
     public void onEnablebackground()
     {
         Slider_music.onValueChanged.AddListener(delegate { changeVolumebackground(Slider_music.value); });

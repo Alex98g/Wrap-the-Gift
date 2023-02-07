@@ -21,15 +21,10 @@ namespace Game
         private GameObject BriefMenuUI; //scene Level
         public GameObject StoreUI;
 
-        //public GameObject EnvironmentHolder;
-
         private Text ClientText; //text for count client
         private Text CoinText; //text for count money (coin)
         private Text TimeText; //text for count time
 
-        private List<GameObject> presentsButtons = new List<GameObject>();
-        private List<GameObject> ribbonsButtons = new List<GameObject>();
-        
         public GameObject BtnRibbon;
         public GameObject BtnBox;
 
@@ -42,10 +37,16 @@ namespace Game
         public ScrollRect RibbonScrollView;
         public ScrollRect PresentScrollView;
 
+        List<IList> Gift = new List<IList>()
+        {
+            PlayerData.AvailablePresentColor,
+            PlayerData.AvailableRibbonColors
+        };
         
-
+        
         void Start()
         {
+            
             GameSceneController = GameObject.Find("GameSceneController").GetComponent<GameSceneController>();
 
             PauseMenuUI = GameObject.Find("PauseMenu");
@@ -57,32 +58,56 @@ namespace Game
             ClientText = GameObject.Find("ClientLbl").GetComponent<Text>();
             CoinText = GameObject.Find("CoinLbl").GetComponent<Text>();
             TimeText = GameObject.Find("TimeLbl").GetComponent<Text>();
-
+            
             PlayerData.CoinCounter = 0;
             briefTimer = GameSceneController.briefTime;
             onStart();
             GameSceneController.LoadGame();
             InitBrief();
-            initPresentScrollBar();
-            initRibbonScrollBar();
+            updatelistGift();
+            initScrollBars(Gift[0], BtnBox, PresentScrollView.content, "boxColor");
+            initScrollBars(Gift[1], BtnRibbon, RibbonScrollView.content, "ribbonColor");
+            
         }
 
-        // Update is called once per frame
+        public void initScrollBars(IList gift, GameObject btn, RectTransform content, string obj)
+        {
+            foreach (var color in gift)
+            {
+                GameObject button = Instantiate(btn);
+                button.name = color.ToString();
+                var box = button.transform.Find(obj);
+                if (content.Find(button.name) == null)
+                {
+                    button.transform.SetParent(content, false);
+                }
+
+                if (color is PresentColor)
+                {
+                    PresentColor colorchangetype = (PresentColor)color;
+                    box.GetComponent<UnityEngine.UI.Image>().color = colorchangetype.ToColor();
+                    button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ChangePresentColor(colorchangetype));
+                }
+                else
+                {
+                    RibbonColor colorchangetype = (RibbonColor)color;
+                    box.GetComponent<UnityEngine.UI.Image>().color = colorchangetype.ToColor();
+                    button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ChangeRibbonColor(colorchangetype));
+                }
+            }
+        }
+
         void Update()
         {
             if (briefTimer > 0)
             {
                 briefTimer -= Time.deltaTime;
-                return;
             }
             else if (IsBrief)
             {
                 OnResume();
             }
-
-            
         }
-        
 
         private void InitBrief()
         {
@@ -90,79 +115,28 @@ namespace Game
             IsBrief = true;
             GameSceneController.State = GameSceneController.GameState.Brief;
             Label_count_level.text = $"{PlayerData.levelToLoad + 1}";
-            //var LevelImage = BriefMenuUI.transform.Find("LevelImage").GetComponent<Image>();
-            //var pathToimage = $"LevelIcons/2x/Level_{PlayerData.levelToLoad + 1}@2x";
-            //var sprite = Resources.Load<Sprite>(pathToimage);
-            //LevelImage.sprite = sprite;
         }
 
-        public void initRibbonScrollBar()
-        {
-
-            var content = GameUI.transform.Find("RibbonScrollView").GetComponent<ScrollRect>().content;
-            
-            //var content = EnvironmentHolder.transform.Find("RibbonScrollView").GetComponent<ScrollRect>().content;
-            foreach (var color in PlayerData.AvailableRibbonColors)
-            {
-                GameObject btn = Instantiate(BtnRibbon);
-                var ribbon = btn.transform.Find("ribbonColor");
-                ribbonsButtons.Add(btn);
-                btn.transform.SetParent(content, false);
-                ribbon.GetComponent<UnityEngine.UI.Image>().color = color.ToColor();
-                btn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ChangeRibbonColor(color));
-            }
-            /*Canvas.ForceUpdateCanvases();
-            if (content.GetComponent<RectTransform>().sizeDelta.y > 0)
-            {
-                content.localPosition = new Vector3(0f, content.GetComponent<RectTransform>().sizeDelta.y / 5f, 0f);
-            }*/
-        }
-
-        private void initPresentScrollBar()
-        {
-         
-            var content = GameUI.transform.Find("PresentScrollView").GetComponent<ScrollRect>().content;
-            foreach (var color in PlayerData.AvailablePresentColor)
-            {
-                GameObject btn = Instantiate(BtnBox);
-                var box = btn.transform.Find("boxColor");
-                presentsButtons.Add(btn);
-                btn.transform.SetParent(content, false);
-                box.GetComponent<UnityEngine.UI.Image>().color = color.ToColor();
-                btn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ChangePresentColor(color));
-            }
-            /*Canvas.ForceUpdateCanvases();
-            if (content.GetComponent<RectTransform>().sizeDelta.y > 0)
-            {
-                content.localPosition = new Vector3(0f, content.GetComponent<RectTransform>().sizeDelta.y / 5f, 0f);
-            }*/
-        }
-
-
-        
-
-
-        //--------------------------------------------//
         public void onPauseClickCallback()
         {
             Sound_ClickBtn.Play();
             GameSceneController.TogglePause();
             OnPause();
         }
-        //--------------------------------------------//
+
         public void onResumeClickCallback()
         {
             Sound_ClickBtn.Play();
             GameSceneController.TogglePause();
             OnResume();
         }
-        //--------------------------------------------//
+
         public void onRestartClickCallback()
         {
             Sound_ClickBtn.Play();
             throw new NotImplementedException();
         }
-        //--------------------------------------------//
+        
         public void onBackToMenuClickCallback()
         {
             Sound_ClickBtn.Play();
@@ -174,7 +148,7 @@ namespace Game
             yield return new WaitForSeconds(2);
             UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenuScene");
         }
-        //--------------------------------------------//
+
         public void onPlayNextLevelClickCallback()
         {
             Sound_ClickBtn.Play();
@@ -188,14 +162,12 @@ namespace Game
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
         }
 
-        //--------------------------------------------//
         public void onSettings()
         {
             Sound_ClickBtn.Play();
             PauseUI.SetActive(false);
             Settings.SetActive(true);
         }
-        //--------------------------------------------//
 
         public void onBackMenuPause()
         {
@@ -203,42 +175,33 @@ namespace Game
             PauseUI.SetActive(true);
             Settings.SetActive(false);
         }
-        //--------------------------------------------//
-        public void Clearribbons()
-        {
-            for (int i = 0; i < RibbonScrollView.content.childCount; i++)
-            {
-                Destroy(RibbonScrollView.content.GetChild(i).gameObject);
-            }
-        }
-        public void Clearpapers()
-        {
-            for (int i = 0; i < PresentScrollView.content.childCount; i++)
-            {
-                Destroy(PresentScrollView.content.GetChild(i).gameObject);
-            }
-        }
-        //--------------------------------------------//
+        
         public void onBackMenuPausefromStore()
         {
             Sound_ClickBtn.Play();
             PauseUI.SetActive(true);
             StoreUI.SetActive(false);
-            Clearribbons();
-            Clearpapers();
-            initRibbonScrollBar();
-            initPresentScrollBar();
+            updatelistGift();
+            initScrollBars(Gift[0], BtnBox, PresentScrollView.content, "boxColor");
+            initScrollBars(Gift[1], BtnRibbon, RibbonScrollView.content, "ribbonColor");
         }
 
-        //--------------------------------------------//
+        public void updatelistGift()
+        {
+            Gift = new List<IList>()
+            {
+                PlayerData.AvailablePresentColor,
+                PlayerData.AvailableRibbonColors
+            };
+        }
+
         public void onStore()
         {
             Sound_ClickBtn.Play();
             PauseUI.SetActive(false);
             StoreUI.SetActive(true);
-            
         }
-        //--------------------------------------------//
+
         private void DeactivateAllUI()
         {
             IsBrief = false;
@@ -248,63 +211,64 @@ namespace Game
                 menuUI.SetActive(false);
             }
         }
-        //--------------------------------------------//
+       
         public void OnWin()
         {
             WinMenuUI.SetActive(true);
         }
-        //--------------------------------------------//
+        
         public void OnLose()
         {
             
             LoseMenuUI.SetActive(true);
         }
-        //--------------------------------------------//
+        
         public void onStart() //for button Start
         {
             DeactivateAllUI();
             BriefMenuUI.SetActive(true);
             IsBrief = true;
-            
         }
-        //--------------------------------------------//
+       
         public void OnResume() //for button Menu
         {
             DeactivateAllUI();
             GameUI.SetActive(true);
         }
-        //--------------------------------------------//
+        
         public void OnPause()
         {
             
             PauseMenuUI.SetActive(true);
         }
-        //--------------------------------------------//
+        
         public void ChangePresentColor(PresentColor color)
         {
-            GameObject.Find("GiftTable").GetComponent<MaterialManager>().WrapColor = color.ToColor();
+            
+            GameObject.Find("GiftTable").GetComponent<MaterialManager>().PresentColor = color.ToColor();
             GameSceneController.CurPresentColor = color;
         }
-        //--------------------------------------------//
+        
         public void ChangeRibbonColor(RibbonColor color)
         {
             GameObject.Find("GiftTable").GetComponent<MaterialManager>().RibbonColor = color.ToColor();
             GameSceneController.CurRibbonColor = color;
         }
-        //--------------------------------------------//
+        
         public void UpdateClientCounter(int current, int common)
         {
             ClientText.text = $"{current}/{common}";
         }
-        //--------------------------------------------//
+        
         public void UpdateCoinCounter(int current)
         {
             CoinText.text = $"{current}";
         }
-        //--------------------------------------------//
+        
         public void UpdateLevelTimer(float timeLeft)
         {
             TimeText.text = $"{timeLeft:0.00}";
         }
     }
+
 }

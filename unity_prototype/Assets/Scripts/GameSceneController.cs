@@ -30,10 +30,9 @@ namespace Game
         public bool IsGamePaused = false;
         public float briefTime;
 
-        //public GameObject ClientPrefab;
-        public List<GameObject> ClientsPrefab;
         
-
+        public List<GameObject> ClientsPrefab;
+      
         public ClientController CurrentClient;
         private GameSceneUIController UIController;
         private GameObject EnvironmentHolder;
@@ -54,7 +53,7 @@ namespace Game
         public List<Text> label_level;
         public Text label_money;
 
-        // Start is called before the first frame update
+        
         void Start()
         {
             LoadGame();
@@ -72,7 +71,6 @@ namespace Game
             
         }
 
-        // Update is called once per frame
         void Update()
         {
             if (State != GameState.Brief)
@@ -121,7 +119,7 @@ namespace Game
                         Sound_Money.Play();
                         UIController.UpdateCoinCounter(PlayerData.CoinCounter);
                         Destroy(CurrentClient.gameObject);
-                        GameObject.Find("GiftTable").GetComponent<MaterialManager>().WrapColor = Color.white;
+                        GameObject.Find("GiftTable").GetComponent<MaterialManager>().PresentColor = Color.white;
                         GameObject.Find("GiftTable").GetComponent<MaterialManager>().RibbonColor = Color.white;
                         CurrentClient = null;
                         State = GameState.Idle;
@@ -129,7 +127,7 @@ namespace Game
                     }
                     break;
                 case GameState.Idle:
-                    //TODO check win conditions
+                    
                     if (CurrentClient == null && ClientIdx == data.ClientCount - 1)
                     {
                         State = GameState.PreWon;
@@ -215,9 +213,9 @@ namespace Game
                 OnPause();
             }
         }
-        private Save CreateSaveGameObject()
+        private SaveData CreateSaveGameObject()
         {
-            Save save = new Save
+            SaveData save = new SaveData
             {
                 levelToLoad = PlayerData.levelToLoad,
                 CoinCounterStore = PlayerData.CoinCounterStore,
@@ -231,10 +229,10 @@ namespace Game
         }
         public void SaveGame()
         {
-            // 1
-            Save save = CreateSaveGameObject();
 
-            // 2
+            SaveData save = CreateSaveGameObject();
+
+            
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Create(Application.persistentDataPath + "/gamesave.save");
             bf.Serialize(file, save);
@@ -243,13 +241,13 @@ namespace Game
         }
         public static void LoadGame()
         {
-            // 1
+            
             if (File.Exists(Application.persistentDataPath + "/gamesave.save"))
             {
-               // 2
+               
                 BinaryFormatter bf = new BinaryFormatter();
                 FileStream file = File.Open(Application.persistentDataPath + "/gamesave.save", FileMode.Open);
-                Save save = (Save)bf.Deserialize(file);
+                SaveData save = (SaveData)bf.Deserialize(file);
                 file.Close();
 
                 PlayerData.levelToLoad = save.levelToLoad;

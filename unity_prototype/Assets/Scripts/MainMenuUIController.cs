@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Game;
 public class MainMenuUIController : MonoBehaviour
@@ -9,19 +8,11 @@ public class MainMenuUIController : MonoBehaviour
     public GameObject MainMenu;
     public GameObject MainMenuUI;
     public GameObject Settings;
-    // Start is called before the first frame update
+    
     void Start()
     {
         backgroundSound.Play();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    
 
     public void onPlayBtnClickCallback()
     {
@@ -54,9 +45,9 @@ public class MainMenuUIController : MonoBehaviour
     IEnumerator waiter_BackSettings()
     {
         yield return new WaitForSeconds(2);
-        MainMenu.active = true;
-        MainMenuUI.active = true;
-        Settings.active = false;
+        MainMenu.SetActive(true);
+        MainMenuUI.SetActive(true);
+        Settings.SetActive(false);
 
     }
     public void onSettingstBtn()
@@ -68,9 +59,9 @@ public class MainMenuUIController : MonoBehaviour
     IEnumerator waiter_Settings()
     {
         yield return new WaitForSeconds(2);
-        MainMenu.active = false;
-        MainMenuUI.active = false;
-        Settings.active = true;
+        MainMenu.SetActive(false);
+        MainMenuUI.SetActive(false);
+        Settings.SetActive(true);
 
     }
 }

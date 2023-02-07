@@ -1,4 +1,5 @@
 using UnityEngine;
+
 namespace Game
 {
     public enum PresentColor
@@ -12,17 +13,7 @@ namespace Game
         SeaGreenCrayola,
         SafetyOrangeBlazeOrange,
         RedCrayola,
-        newPaperColor1,
-        newPaperColor2,
-        newPaperColor3,
-        newPaperColor4,
-        newPaperColor5,
-        newPaperColor6,
-        newPaperColor7,
-        newPaperColor8,
-        newPaperColor9,
-        newPaperColor10,
-
+        newPaperColor
     }
 
     public enum RibbonColor
@@ -35,23 +26,11 @@ namespace Game
         SeaGreenCrayola,
         SafetyOrangeBlazeOrange,
         RedCrayola,
-        newRibbonColor1,
-        newRibbonColor2,
-        newRibbonColor3,
-        newRibbonColor4,
-        newRibbonColor5,
-        newRibbonColor6,
-        newRibbonColor7,
-        newRibbonColor8,
-        newRibbonColor9,
-        newRibbonColor10,
+        newRibbonColor,
     }
 
-
-    //---------------------------------------------------------------------------------------------------------------//
     public static class PresentColorExtension
     {
-        
         public static Color ToColor(this PresentColor presentColor)
         {
             switch (presentColor) {
@@ -74,28 +53,26 @@ namespace Game
             }
             throw new System.Exception($"Can't transform present color {presentColor} into common color");
         }
-        public static string ToStr(this PresentColor NewPaperColor)
+       
+        public static int ToInt(this PresentColor NewPaperColor)
         {
-
             switch (NewPaperColor)
             {
                 case PresentColor.VividSkyBlue:
-                    return "15";
+                    return 15;
                 case PresentColor.SeaGreenCrayola:
-                    return "20";
+                    return 20;
                 case PresentColor.SafetyOrangeBlazeOrange:
-                    return "20";
+                    return 20;
                 case PresentColor.RedCrayola:
-                    return "20";
+                    return 20;
             }
             throw new System.Exception($"Can't transform ribbon color {NewPaperColor} into common color");
         }
-
     }
-    //---------------------------------------------------------------------------------------------------------------//
+    
     public static class RibbonColorExtension
     {
-        
         public static Color ToColor(this RibbonColor ribbonColor)
         {
             switch (ribbonColor)
@@ -118,17 +95,16 @@ namespace Game
 
             throw new System.Exception($"Can't transform ribbon color {ribbonColor} into common color");
         }
-        public static string ToStr(this RibbonColor NewribbonColor)
+        public static int ToInt(this RibbonColor NewribbonColor)
         {
-
             switch (NewribbonColor)
             {
                 case RibbonColor.SeaGreenCrayola:
-                    return "20";
+                    return 20;
                 case RibbonColor.SafetyOrangeBlazeOrange:
-                    return "20";
+                    return 20;
                 case RibbonColor.RedCrayola:
-                    return "15";
+                    return 15;
             }
             throw new System.Exception($"Can't transform ribbon color {NewribbonColor} into common color");
         }

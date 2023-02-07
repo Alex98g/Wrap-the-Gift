@@ -8,10 +8,10 @@ public class MaterialManager : MonoBehaviour
     private Renderer[] _renderRibbons;
     private bool isInited = false;
 
-    public GameObject objWrap;
+    public GameObject objPresent;
     public GameObject objRibbon;
 
-    public Color WrapColor
+    public Color PresentColor
     {
         get => _renderWrap.material.GetColor("_Color");
         set => _renderWrap.material.SetColor("_Color", value);
@@ -29,7 +29,6 @@ public class MaterialManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         if (!isInited)
@@ -40,10 +39,10 @@ public class MaterialManager : MonoBehaviour
 
     public void Init()
     {
-        objWrap = gameObject.transform.Find("BaseWrap").gameObject;
+        objPresent = gameObject.transform.Find("BasePresent").gameObject;
         objRibbon = gameObject.transform.Find("Ribbon").gameObject;
 
-        _renderWrap = objWrap.GetComponent<Renderer>();
+        _renderWrap = objPresent.GetComponent<Renderer>();
         _renderRibbons = objRibbon.GetComponentsInChildren<Renderer>();
         isInited = true;
     }

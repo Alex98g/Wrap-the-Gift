@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff0d0afe8e0b96c42b24315627412a64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objWrap: {fileID: 7039243091613229198}
+  objPresent: {fileID: 7039243091613229198}
   objRibbon: {fileID: 6835203589160090505}
 --- !u!1 &3459752826524271218
 GameObject:
@@ -388,7 +388,7 @@ GameObject:
   - component: {fileID: 3305466171260829089}
   - component: {fileID: 5320595189953530375}
   m_Layer: 0
-  m_Name: BaseWrap
+  m_Name: BasePresent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
